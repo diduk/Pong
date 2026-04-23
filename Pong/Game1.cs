@@ -18,6 +18,22 @@ int jobbSzel = GraphicsDevice.Viewport.Width;
 
 // Az alja lekérdezése:
 int ablakAlja = GraphicsDevice.Viewport.Height;
+-------------------------------------------------------
+2. Feladat: Az ütők mozgatása
+Próbáljuk meg a referenciád alapján életre kelteni a bal oldali ütőt!
+
+A feladatod:
+Írd meg az Update metódusba azt a logikát, ami a W billentyűre felfelé, az S billentyűre pedig lefelé mozgatja a leftPaddle-t.
+
+Segítség a logikához:
+
+Kérd le a billentyűzet állapotát: KeyboardState state = Keyboard.GetState();.
+
+Vizsgáld meg a gombot: if (state.IsKeyDown(Keys.W)).
+
+Módosítsd a pozíciót: leftPaddle.Y -= 5; (Mivel a Rectangle.Y egész szám, itt most nem kell a float sebességgel és a deltaTime-mal trükközni, elég egy fix pixelérték az első teszthez).
+
+Ha megírtad és letesztelted, frissítsd a GitHubot, és küldd a linket! Ha elakadsz, másold be ide az Update részedet!
  */
 
 namespace Pong
@@ -43,8 +59,6 @@ namespace Pong
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            pixel = new Texture2D(GraphicsDevice, 1, 1);
-            pixel.SetData(new[] { Color.White });
 
             leftPaddle = new Rectangle(5, 240-50, 20, 100);
             rightPaddle = new Rectangle(800-25, 240-50, 20, 100);
@@ -57,6 +71,9 @@ namespace Pong
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            pixel = new Texture2D(GraphicsDevice, 1, 1);
+            pixel.SetData(new[] { Color.White });
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -65,7 +82,21 @@ namespace Pong
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+
+
             // TODO: Add your update logic here
+
+            KeyboardState state = Keyboard.GetState();
+
+            if (state.IsKeyDown(Keys.W))
+            {
+                leftPaddle.Y -= 5;
+            }
+            if (state.IsKeyDown(Keys.S))
+            {
+                leftPaddle.Y += 5;
+            }
+
 
             base.Update(gameTime);
         }
