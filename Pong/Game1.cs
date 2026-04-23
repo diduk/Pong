@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿//Jelszó : labda ütközés sallárom
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 /*
@@ -60,6 +61,14 @@ namespace Pong
             IsMouseVisible = true;
         }
 
+        public void ResetBall()
+        {
+            ball.X = 400 - 8;
+            ball.Y = 240 - 8;
+            ballDirectionX = random.Next(0, 2) * 2 - 1;
+            ballDirectionY = random.Next(0, 2) * 2 - 1;
+        }
+
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
@@ -70,8 +79,8 @@ namespace Pong
 
             random = new System.Random();
 
-            ballDirectionX= random.Next(0, 2) * 2 - 1;
-            ballDirectionY= random.Next(0, 2) * 2 - 1;
+            ResetBall();
+ 
 
 
             base.Initialize();
@@ -157,10 +166,13 @@ namespace Pong
 
             if (ball.X <= 0 || ball.X>=GraphicsDevice.Viewport.Width - ball.Width)
             {
-                ballDirectionX *= -1;
+                ResetBall();
             }
 
-
+            if (ball.Intersects(leftPaddle) || ball.Intersects(rightPaddle))
+            {
+                ballDirectionX *= -1; // Megfordítjuk a vízszintes irányt
+            }
 
 
 
