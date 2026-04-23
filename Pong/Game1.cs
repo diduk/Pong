@@ -47,6 +47,10 @@ namespace Pong
         Rectangle leftPaddle;
         Rectangle rightPaddle;
         Rectangle ball;
+        int ballSpeed = 3;
+        int ballDirectionX;// = 1;
+        int ballDirectionY;// = 1;
+        System.Random random;// = new Random();   
 
 
         public Game1()
@@ -63,6 +67,12 @@ namespace Pong
             leftPaddle = new Rectangle(5, 240-50, 20, 100);
             rightPaddle = new Rectangle(800-25, 240-50, 20, 100);
             ball = new Rectangle(400-8, 240-8, 16, 16);
+
+            random = new System.Random();
+
+            ballDirectionX= random.Next(0, 2) * 2 - 1;
+            ballDirectionY= random.Next(0, 2) * 2 - 1;
+
 
             base.Initialize();
         }
@@ -82,6 +92,10 @@ namespace Pong
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            ball.X += ballSpeed * ballDirectionX;
+            ball.Y += ballSpeed * ballDirectionY;
+
+
 
 
             // TODO: Add your update logic here
@@ -90,12 +104,66 @@ namespace Pong
 
             if (state.IsKeyDown(Keys.W))
             {
-                leftPaddle.Y -= 5;
+                if (leftPaddle.Y > 5)
+                {
+                    leftPaddle.Y -= 5;
+                }
+                else
+                {
+                    leftPaddle.Y = 0;
+                }
             }
+
             if (state.IsKeyDown(Keys.S))
             {
-                leftPaddle.Y += 5;
+                if (leftPaddle.Y < GraphicsDevice.Viewport.Height - leftPaddle.Height - 5)
+                {
+                    leftPaddle.Y += 5;
+                }
+                else
+                {
+                    leftPaddle.Y = GraphicsDevice.Viewport.Height - leftPaddle.Height;
+                }
             }
+
+
+            if (state.IsKeyDown(Keys.Up))
+            {
+                if (rightPaddle.Y > 5)
+                {
+                    rightPaddle.Y -= 5;
+                }
+                else
+                {
+                    rightPaddle.Y = 0;
+                }
+            }
+            if (state.IsKeyDown(Keys.Down))
+            {
+                if (rightPaddle.Y < GraphicsDevice.Viewport.Height - rightPaddle.Height - 5)
+                {
+                    rightPaddle.Y += 5;
+                }
+                else
+                {
+                    rightPaddle.Y = GraphicsDevice.Viewport.Height - rightPaddle.Height;
+                }
+            }
+
+            if (ball.Y <= 0 || ball.Y >= GraphicsDevice.Viewport.Height - ball.Height)
+            {
+                ballDirectionY *= -1;
+            }
+
+            if (ball.X <= 0 || ball.X>=GraphicsDevice.Viewport.Width - ball.Width)
+            {
+                ballDirectionX *= -1;
+            }
+
+
+
+
+
 
 
             base.Update(gameTime);
